@@ -17,7 +17,7 @@
 
 #define DEVICE_NO 1
 
-#define HOST "192.168.0.100"
+#define HOST "xavisoft.co.zw"
 #define PORT "8080"
 
 SoftwareSerial esp(ESP_RX, ESP_TX);
