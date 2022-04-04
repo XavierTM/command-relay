@@ -19,11 +19,22 @@
 
 #define HOST "xavisoft.co.zw"
 #define PORT "8080"
+#define SSID "Netro Blue Valley"
+#define WIFI_PWD "@Malkon#One!"
+#define PHONE_NO "+263772801761"
 
 SoftwareSerial esp(ESP_RX, ESP_TX);
 SoftwareSerial gsm(GSM_RX, GSM_TX);
 
 
+
+void clearGsm() {
+
+	// Serial.print("GSM: ");
+
+	while(gsm.available())
+		gsm.read();
+}
 
 
 
@@ -115,14 +126,20 @@ void sendMessage() {
 	gsm.begin(9600);
 
 
+	clearGsm();
+
+
 	gsm.println("AT+CMGF=1");
 	delay(1000);
-	gsm.println("AT+CMGS=\"+263774613020\"\r");
+	gsm.println("AT+CMGS=\"" + String(PHONE_NO) + "\"\r");
+	// gsm.println("AT+CMGS=\"+263777901802\"\r");
 	delay(1000);
 	gsm.println("The button is pressed."); // text to be sent
 	delay(100);
 	gsm.println((char)26); //ASII Code for CTRL+Z
 	delay(1000);
+
+	clearGsm();
 
 	gsm.end();
 	
@@ -206,7 +223,7 @@ void setup() {
 	delay(2000);
 
 	// connect
-	esp.println("AT+CWJAP=\"Netro Blue Valley\",\"@Malkon#One!\"");
+	esp.println("AT+CWJAP=\"" + String(SSID) + "\",\"" + String(WIFI_PWD) + "\"");
 	delay(1000);
 
 
@@ -218,6 +235,13 @@ void setup() {
 
 	pinMode(BUTTON_PIN, INPUT_PULLUP);
 
+
+	// delay(2000);
+	// sendMessage();
+	// Serial.println('message sent.');
+
+	// gsm.begin(9600);
+
 }
 
 
@@ -227,10 +251,11 @@ void loop () {
 
 	if (isButtonPressed()) {
 		sendCommand();
-		// Serial.println("Button pressed.");
 
-		if (DEVICE_NO == 1)
+		if (DEVICE_NO == 1) {
+			Serial.println("Calling sendMessage");
 			sendMessage();
+		}
 	}
 
 
@@ -248,12 +273,18 @@ void loop () {
 
 // 	// delay(1000);
 
-// 	while (Serial.available())
-// 		esp.write(Serial.read());
+// 	// while (Serial.available())
+// 	// 	gsm.write(Serial.read());
 
 
-// 	while (esp.available())
-// 		Serial.write(esp.read());
+// 	// while (gsm.available())
+// 	// 	Serial.write(gsm.read());
+
+
+// 	delay(2000);
+// 	sendMessage();
+
+// 	while (true);
 
 
 // }
